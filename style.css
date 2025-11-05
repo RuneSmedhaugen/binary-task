@@ -1,0 +1,171 @@
+/* fresh from chatgpt */
+
+:root{
+    --bg-1: #071024;
+    --bg-2: #07182a;
+    --card: rgba(255,255,255,0.03);
+    --accent: #00d1ff;
+    --accent-2: #7fff9e;
+    --muted: #98a0b3;
+    --glass: rgba(255,255,255,0.02);
+    --glass-2: rgba(255,255,255,0.035);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter, "Segoe UI", Roboto, system-ui, -apple-system; background:
+    radial-gradient(800px 400px at 10% 10%, rgba(0,209,255,0.04), transparent),
+    linear-gradient(180deg,var(--bg-1),var(--bg-2)); color:#eaf6ff}
+
+/* layout: column flow so items stack (header top-left, instructions under, binary centered, controls/result under) */
+#app{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;         /* center main column by default */
+    gap:14px;
+    padding:40px 18px;
+}
+
+/* card-like wrapper for content (keeps your existing look) */
+#app > div, #app > b1{
+    width:760px;
+    max-width:96%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:14px;
+    padding:18px;
+    box-shadow: 0 20px 60px rgba(2,8,23,0.6);
+    border:1px solid var(--glass-2);
+}
+
+/* header: force to the top-left of the card area */
+b1#header{
+    display:block;
+    font-family: "Courier New", monospace;
+    font-weight:800;
+    font-size:20px;
+    color: #e6fbff;
+    letter-spacing:0.6px;
+    padding:6px 8px;
+    background: linear-gradient(90deg, rgba(0,209,255,0.06), rgba(127,255,154,0.03));
+    border-radius:8px;
+    width:max-content;
+    margin:0;
+    align-self:flex-start;      /* place header at left edge */
+}
+
+/* instructions should sit under the header and align left */
+#instructions{
+    color:var(--muted);
+    margin:6px 0 0;
+    line-height:1.45;
+    font-size:13px;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.02);
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+    width:760px;
+    max-width:96%;
+    align-self:flex-start;     /* keep instructions left-aligned under header */
+}
+
+/* center the binary string visually */
+#binary-string{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    padding:18px;
+    margin:10px 0 14px;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    font-weight:800;
+    width:760px;
+    max-width:96%;
+}
+
+/* digits if you render as spans */
+#binary-string span{
+    width:58px;
+    height:72px;
+    display:inline-grid;
+    place-items:center;
+    font-family: "Courier New", monospace;
+    font-size:34px;
+    border-radius:10px;
+    color:var(--accent);
+    box-shadow: 0 10px 26px rgba(2,6,16,0.6);
+    background: linear-gradient(180deg,#031522, #072434);
+    transition: transform 360ms cubic-bezier(.2,.9,.25,1), box-shadow 220ms;
+}
+
+/* fallback when text-only */
+#binary-string{
+    font-family: "Courier New", monospace;
+    font-size:34px;
+    letter-spacing:12px;
+    color:var(--accent);
+    text-shadow: 0 6px 20px rgba(2,10,20,0.6);
+}
+
+/* controls / result centered beneath binary string */
+#flip-numbers{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:center;
+    margin-top:6px;
+    padding:12px;
+    border-radius:10px;
+    background:var(--glass);
+    border:1px solid rgba(255,255,255,0.02);
+    width:760px;
+    max-width:96%;
+}
+
+#flip-count{
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.03);
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+    color: inherit;
+    font-weight:700;
+}
+
+#flip-numbers button{
+    padding:10px 14px;
+    border-radius:10px;
+    border:0;
+    cursor:pointer;
+    font-weight:800;
+    background: linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:#041718;
+    box-shadow: 0 14px 32px rgba(0,209,255,0.08), 0 6px 20px rgba(2,8,20,0.45);
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+#flip-numbers button:hover{ transform: translateY(-3px) scale(1.01); box-shadow: 0 22px 46px rgba(0,209,255,0.12); }
+
+/* result centered under controls */
+#result{
+    margin-top:8px;
+    text-align:center;
+    font-weight:800;
+    color:var(--accent-2);
+    font-size:15px;
+    padding:8px 12px;
+    width:760px;
+    max-width:96%;
+}
+
+/* responsive */
+@media (max-width:760px){
+    #instructions, #binary-string, #flip-numbers, #result{
+        width:100%;
+        max-width:100%;
+    }
+    #binary-string{ font-size:26px; letter-spacing:8px; padding:12px; }
+    #flip-numbers{ flex-direction:column; gap:8px; }
+    #flip-numbers select, #flip-numbers button{ width:100%; }
+}

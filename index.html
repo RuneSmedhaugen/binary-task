@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <title>binary task</title>
+</head>
+<body>
+    <div id="app">
+        <b1 id="header">Binary Task</b1>
+        <div id="instructions">
+        Take this binary string and convert all numbers to 1.
+        You choose how many numbers to flip at once, if you pick 1 only first number flips, if you pick 2 first two numbers flip and so on.
+        1's become 0's and 0's become 1's.
+        </div>
+
+        <div id="binary-string"></div>
+        <div id="flip-numbers">
+            Choose how many numbers to flip:
+            <select id="flip-count" onchange="flipCount = parseInt(this.value)">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+            <button onclick="flipNumbers()">Flip</button>
+        </div>
+        <div id="result"></div>
+            
+
+
+
+    </div>
+
+    <script>
+        let binaryString = "010110";
+        let flipCount = 1;
+        let totalFlips = 0;
+
+        function renderBinaryString() {
+            document.getElementById('binary-string').innerHTML = 'Binary string: ' + binaryString;
+        }
+        renderBinaryString();
+
+        function flipNumbers() {
+            if (flipCount <= 0 || flipCount > binaryString.length) {
+                alert('Invalid flip count');
+                return;
+            }
+
+            let flippedPart = '';
+            for (let i = 0; i < flipCount; i++) {
+                flippedPart += binaryString[i] === '0' ? '1' : '0';
+            }
+            binaryString = flippedPart + binaryString.slice(flipCount);
+            totalFlips++;
+            renderBinaryString();
+
+            if (!binaryString.includes('0')) {
+                document.getElementById('result').innerHTML = 'Congratulations! You converted all to 1s in ' + totalFlips + ' flips.';
+                binaryString = "010110";
+                totalFlips = 0;
+                renderBinaryString();
+            }
+        }
+
+    </script>
+</body>
+</html>
