@@ -123,6 +123,7 @@ b1#header{
     border:1px solid rgba(255,255,255,0.02);
     width:760px;
     max-width:96%;
+    color: rgb(73, 148, 11);
 }
 
 #flip-count{
