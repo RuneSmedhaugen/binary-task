@@ -7,7 +7,7 @@
     <title>binary task</title>
 </head>
 <body>
-    <div id="app">
+     <div id="app">
         <b1 id="header">Binary Task</b1>
         <div id="instructions">
         Take this binary string and convert all numbers to 1.
@@ -15,58 +15,100 @@
         1's become 0's and 0's become 1's.
         </div>
 
+        <div id="edit-binary" style="width:760px;max-width:96%;display:flex;gap:8px;align-items:center;margin:8px 0;">
+            <label for="binary-input" style="color:#98a0b3;font-size:13px;min-width:120px">Custom binary</label>
+            <input id="binary-input" type="text" inputmode="numeric" pattern="[01]*" style="flex:1;padding:8px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit" />
+            <button id="apply-binary" onclick="applyBinary()" style="padding:8px 12px;border-radius:8px">Apply</button>
+            <button id="reset-default" onclick="resetToDefault()" style="padding:8px 12px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.06);color:#98a0b3">Reset</button>
+        </div>
+
         <div id="binary-string"></div>
         <div id="flip-numbers">
             Choose how many numbers to flip:
-            <select id="flip-count" onchange="flipCount = parseInt(this.value)">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-            </select>
+            <select id="flip-count" onchange="onFlipCountChange(this.value)"></select>
             <button onclick="flipNumbers()">Flip</button>
         </div>
         <div id="result"></div>
-            
-
-
-
     </div>
 
     <script>
-        let binaryString = "010110";
-        let flipCount = 1;
-        let totalFlips = 0;
+    // state
+    let defaultBinary = "010110";
+    let binaryString = defaultBinary.slice();
+    let flipCount = 1;
+    let totalFlips = 0;
 
-        function renderBinaryString() {
-            document.getElementById('binary-string').innerHTML = 'Binary string: ' + binaryString;
+    // helpers (no event listeners; functions only)
+    function populateFlipOptions(len) {
+        const flipSelect = document.getElementById('flip-count');
+        const max = Math.max(3, len || 0);
+        flipSelect.innerHTML = '';
+        for (let i = 1; i <= max; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = i;
+            flipSelect.appendChild(opt);
         }
+        if (flipCount > max) flipCount = max;
+        flipSelect.value = String(flipCount);
+    }
+
+    function renderBinaryString() {
+        const container = document.getElementById('binary-string');
+        // render as text; CSS handles appearance. You can change to spans later.
+        container.innerHTML = 'Binary string: ' + binaryString;
+        populateFlipOptions(binaryString.length);
+    }
+
+    function onFlipCountChange(val) {
+        flipCount = parseInt(val, 10) || 1;
+    }
+
+    function flipNumbers() {
+        if (flipCount <= 0 || flipCount > binaryString.length) {
+            alert('Invalid flip count');
+            return;
+        }
+
+        let flippedPart = '';
+        for (let i = 0; i < flipCount; i++) {
+            flippedPart += binaryString[i] === '0' ? '1' : '0';
+        }
+        binaryString = flippedPart + binaryString.slice(flipCount);
+        totalFlips++;
+        document.getElementById('result').innerHTML = '';
         renderBinaryString();
 
-        function flipNumbers() {
-            if (flipCount <= 0 || flipCount > binaryString.length) {
-                alert('Invalid flip count');
-                return;
-            }
-
-            let flippedPart = '';
-            for (let i = 0; i < flipCount; i++) {
-                flippedPart += binaryString[i] === '0' ? '1' : '0';
-            }
-            binaryString = flippedPart + binaryString.slice(flipCount);
-            totalFlips++;
-            renderBinaryString();
-
-            if (!binaryString.includes('0')) {
-                document.getElementById('result').innerHTML = 'Congratulations! You converted all to 1s in ' + totalFlips + ' flips.';
-                binaryString = "010110";
-                totalFlips = 0;
-                renderBinaryString();
-            }
+        if (!binaryString.includes('0')) {
+            document.getElementById('result').innerHTML = 'Congratulations! You converted all to 1s in ' + totalFlips + ' flips.';
+            // do not auto-reset — user can Reset to default or edit the string manually
         }
+    }
 
+    function applyBinary() {
+        const binaryInput = document.getElementById('binary-input');
+        const v = (binaryInput.value || '').trim();
+        if (!/^[01]+$/.test(v) || v.length < 3) {
+            alert('Binary string must contain only 0 and 1 and be at least 3 character long.');
+            return;
+        }
+        binaryString = v;
+        totalFlips = 0;
+        document.getElementById('result').innerHTML = '';
+        renderBinaryString();
+    }
+
+    function resetToDefault() {
+        binaryString = defaultBinary.slice();
+        document.getElementById('binary-input').value = defaultBinary;
+        totalFlips = 0;
+        document.getElementById('result').innerHTML = '';
+        renderBinaryString();
+    }
+
+    // initialize UI values
+    document.getElementById('binary-input').value = defaultBinary;
+    renderBinaryString();
     </script>
 </body>
 </html>
